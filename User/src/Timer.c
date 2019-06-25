@@ -41,14 +41,16 @@ void Timer2Init(u16 Period, FunctionalState State)
 
 void TIM2_IRQHandler(void)   //TIM2中断服务程序
 {
-	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否 
+	if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) 	//检查指定的TIM中断发生与否 
 	{
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update  );  //清除TIMx的中断标志位
-		MyDMA_Enable(DMA1_Channel4, packBufferLen);	
-		while(DMA_GetFlagStatus(DMA1_FLAG_TC4) == RESET);
-		DMA_ClearFlag(DMA1_FLAG_TC4);
-		sendPackFlag = 0;
-		TIM_Cmd(TIM2, DISABLE);
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);  	//清除TIMx的中断标志位
+		if(1 == sendPackFlag)
+		{
+			MyDMA_Enable(DMA1_Channel4, packBufferLen);	
+			while(DMA_GetFlagStatus(DMA1_FLAG_TC4) == RESET);
+			DMA_ClearFlag(DMA1_FLAG_TC4);	
+			sendPackFlag = 0;
+		}
 	}	
 }
 
