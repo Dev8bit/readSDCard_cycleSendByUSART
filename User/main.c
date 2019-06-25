@@ -44,7 +44,7 @@ int main(void)
 {
 	/* USART1 config */
 	KeyInit();
-	Timer2Init(100, DISABLE);
+	Timer2Init(100, ENABLE);
 	Timer3Init(5, ENABLE);
 	RS232_Init(115200);
     InitSignalLed();
@@ -86,7 +86,6 @@ int main(void)
 	{
 		if(1 == switch2.PressedState)		//按键状态置位，暂不复位
 		{
-//			Delay50ms();//有必要吗？？？？
 			retCount = 0;
             res = 0;
 			while (0 == res && retCount < 3)		//跳过3行非法字符串，!!!具体行数再论!!!
@@ -100,11 +99,9 @@ int main(void)
                 CtrlLed3(1);		//文件操作指示，亮为读取完毕
 				while(1);
 			}
-            packBufferLen = strlen(packBuffer);
-
-			sendPackFlag = 1;
-			TIM_Cmd(TIM2, ENABLE);
 			
+            packBufferLen = strlen(packBuffer);
+			sendPackFlag = 1;
 			while(1 == sendPackFlag);
 		}
 	}
